@@ -100,7 +100,9 @@ namespace EX03.ConsoleUI
 
         private void insertNewVehicleToTheGarage()
         {
-            string o_LicenseNumber = null;
+            string o_LicenseNumber;
+            string o_PhoneNumber;
+            string o_ClientName;
             
             Console.WriteLine("Please Enter License Number of your car: ");
 
@@ -108,8 +110,10 @@ namespace EX03.ConsoleUI
 
             if(!m_GarageManager.IsVehicleExistsInTheGarage(o_LicenseNumber))
             {
+                getClientNameAndPhoneNumber(out o_PhoneNumber, out o_ClientName);
+
                 string vehicleType =  getVehicleInput();
-                
+                enterVehicleData();
             }
             else
             {
@@ -121,6 +125,47 @@ namespace EX03.ConsoleUI
 
 
 
+        }
+
+        private void getClientNameAndPhoneNumber(out string o_PhoneNumber, out string o_ClientName)
+        {
+            bool isValidNumber = false;
+
+            Console.WriteLine("Please enter your name:");
+            o_ClientName = Console.ReadLine();
+
+            Console.WriteLine("Please enter your phone number: ");
+
+            do
+            {
+                o_PhoneNumber = Console.ReadLine();
+
+                if(!isValidPhoneNumber(o_PhoneNumber))
+                {
+                    Console.WriteLine("invalid phone number. Please try again: ");
+                }
+                else
+                {
+                    isValidNumber = true;
+                }
+            }
+            while(!isValidNumber);
+        }
+
+        private bool isValidPhoneNumber(string i_PhoneNumber)
+        {
+            bool isValidNumber = true;
+
+            foreach(char character in i_PhoneNumber)
+            {
+                if(!char.IsDigit(character))
+                {
+                    isValidNumber = false;
+                    break;
+                }
+            }
+
+            return isValidNumber;
         }
 
         private string getVehicleInput()
