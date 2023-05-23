@@ -124,7 +124,7 @@ namespace EX03.ConsoleUI
 
 
 
-
+            //VehicleFactory.Get
         }
 
         private void getClientNameAndPhoneNumber(out string o_PhoneNumber, out string o_ClientName)
