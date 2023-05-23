@@ -32,5 +32,23 @@ namespace EX03.GarageLogic.entities.EnergySourceTypes
             this.m_FuelType = i_FuelType;
         }
 
+        public override void FillEnergy(float i_EnergyToAdd)
+        {
+            throw new ArgumentException("Missing fuel type argument.");
+        }
+
+        public override void FillEnergy(float i_EnergyToAdd, eFuelType i_FuelType)
+        {
+            if(FuelType != i_FuelType)
+            {
+                throw new ArgumentException("Fuel type is incorrect" +
+                    ", " + FuelType + " is different then" + i_FuelType);
+            }
+            else
+            {
+                base.FillEnergy(i_EnergyToAdd);
+            }
+        }
+
     }
 }
