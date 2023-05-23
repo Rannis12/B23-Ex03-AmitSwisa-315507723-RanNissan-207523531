@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EX03.GarageLogic.entities
 {
-    class Client
+    public class Client
     {
         private readonly string m_ClientName;
         private readonly string m_PhoneNumber;

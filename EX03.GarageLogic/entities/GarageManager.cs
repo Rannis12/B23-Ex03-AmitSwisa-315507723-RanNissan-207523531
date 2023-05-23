@@ -8,7 +8,7 @@ using EX03.GarageLogic.entities.EnergySourceTypes;
 
 namespace EX03.GarageLogic
 {
-    class GarageManager
+    public class GarageManager
     {
         private readonly Dictionary<string, GarageForm> r_GarageForms = new Dictionary<string, GarageForm>();
 
