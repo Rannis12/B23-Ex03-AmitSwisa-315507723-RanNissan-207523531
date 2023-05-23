@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EX03.GarageLogic.entities
 {
-    class GarageForm
+    public class GarageForm
     {
         public enum eServiceStatus
         {

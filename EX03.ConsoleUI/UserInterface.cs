@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EX03.GarageLogic;
+using EX03.GarageLogic.entities;
 
 namespace EX03.ConsoleUI
 {
     class UserInterface
     {
+        private GarageManager m_GarageManager;
+
         private enum eMenuOptions
         {
             InsertNewVehicleToTheGarage = 1,
@@ -96,19 +100,29 @@ namespace EX03.ConsoleUI
 
         private void insertNewVehicleToTheGarage()
         {
-            string r_LicenseNumber = null;
+            string o_LicenseNumber = null;
             
             Console.WriteLine("Please Enter License Number of your car: ");
 
-            getLicenseNumber(r_LicenseNumber);
+            getLicenseNumber(out o_LicenseNumber);
 
+            if(!m_GarageManager.IsVehicleExistsInTheGarage(o_LicenseNumber))
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("The vehicle already in the garage!");
+
+                m_GarageManager.ChangeVehicleStatusInTheGarage(o_LicenseNumber, GarageForm.eServiceStatus.InRepair);
+            }
 
 
 
 
         }
 
-        private void getLicenseNumber(string /*!!*/ o_LicenseNumber)
+        private void getLicenseNumber(out string o_LicenseNumber)
         {
             bool isValidNumber = false;
             do
