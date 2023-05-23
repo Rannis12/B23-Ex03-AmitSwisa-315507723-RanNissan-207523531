@@ -40,7 +40,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Compile Include="entities\Client.cs" />
+    <Compile Include="entities\Factory\VehicleFactory.cs" />
+    <Compile Include="entities\GarageClient.cs" />
     <Compile Include="entities\GarageForm.cs" />
     <Compile Include="entities\EnergySourceTypes\ElectricEnergy.cs" />
     <Compile Include="entities\EnergySourceTypes\EnergySource.cs" />

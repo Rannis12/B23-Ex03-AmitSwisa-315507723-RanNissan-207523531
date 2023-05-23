@@ -74,7 +74,7 @@ namespace EX03.ConsoleUI
                     insertNewVehicleToTheGarage();
                     break;
                 case eMenuOptions.ShowAllLicenseNumbersInGarageWithFiltering:
-                    
+                    showAllLicensesWithFilterOption();
                     break;
                 case eMenuOptions.ChangeVehicleStatusInTheGarage:
                     
@@ -195,10 +195,11 @@ namespace EX03.ConsoleUI
 
         private bool isOneOfVehicles(string i_VehicleType)
         {
-            return i_VehicleType.ToUpper().Equals("ELECTRICCAR") || i_VehicleType.ToUpper().Equals("FUELCAR")
-                                                                 || i_VehicleType.ToUpper().Equals("TRUCK")
-                                                                 || i_VehicleType.ToUpper().Equals("ELECTRICMOTORCYCLE")
-                                                                 || i_VehicleType.ToUpper().Equals("FUELCAR");
+            return i_VehicleType.ToUpper().Equals("ELECTRICCAR") 
+                || i_VehicleType.ToUpper().Equals("FUELCAR")                                            
+                || i_VehicleType.ToUpper().Equals("TRUCK")         
+                || i_VehicleType.ToUpper().Equals("ELECTRICMOTORCYCLE")                                         
+                || i_VehicleType.ToUpper().Equals("FUELCAR");
         }
 
         private void getLicenseNumber(out string o_LicenseNumber)
