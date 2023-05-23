@@ -18,7 +18,7 @@ namespace EX03.GarageLogic.entities.EnergySourceTypes
 
         public override void FillEnergy(float i_EnergyToAdd, eFuelType i_FuelType)
         {
-            throw new ArgumentException("Electric car can't receive fuel type.")
+            throw new ArgumentException("Electric vehicle can't receive fuel.");
         }
     }
 }
