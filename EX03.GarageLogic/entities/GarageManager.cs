@@ -12,7 +12,7 @@ namespace EX03.GarageLogic
     {
         private readonly Dictionary<string, GarageForm> r_GarageForms = new Dictionary<string, GarageForm>();
 
-        public void InsertVehicleToGarage(string i_LicenseNumber, Vehicle i_Vehicle, Client i_Client)
+        public void InsertVehicleToGarage(string i_LicenseNumber, Vehicle i_Vehicle, GarageClient i_Client)
         {
             GarageForm garageForm = new GarageForm(i_Vehicle, i_Client);
             r_GarageForms.Add(i_LicenseNumber, garageForm);

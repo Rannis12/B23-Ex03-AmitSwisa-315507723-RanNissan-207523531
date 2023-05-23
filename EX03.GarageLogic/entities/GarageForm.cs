@@ -16,10 +16,10 @@ namespace EX03.GarageLogic.entities
         }
 
         private eServiceStatus m_ServiceStatus = eServiceStatus.InRepair;
-        private readonly Client r_Client;
+        private readonly GarageClient r_Client;
         private readonly Vehicle r_Vehicle;
         
-        public GarageForm(Vehicle i_Vehicle, Client i_Client)
+        public GarageForm(Vehicle i_Vehicle, GarageClient i_Client)
         {
             r_Vehicle = i_Vehicle;
             r_Client = i_Client;
@@ -33,7 +33,7 @@ namespace EX03.GarageLogic.entities
             }
         }
 
-        public Client Client
+        public GarageClient Client
         {
             get
             {
