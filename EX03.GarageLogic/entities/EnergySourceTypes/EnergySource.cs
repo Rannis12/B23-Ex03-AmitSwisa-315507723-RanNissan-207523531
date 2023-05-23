@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EX03.GarageLogic.Exceptions;
-
+using static EX03.GarageLogic.entities.EnergySourceTypes.FuelEnergy;
 
 namespace EX03.GarageLogic.entities.EnergySourceTypes
 {
     public abstract class EnergySource
     {
-        private float m_CurrentEnergyAmount;
-        private readonly float m_MaxEnergyAmount;
+        protected float m_CurrentEnergyAmount;
+        protected readonly float m_MaxEnergyAmount;
 
         public EnergySource(float i_MaxEnergyAmount, float i_CurrentFuelAmount)
         {
@@ -35,7 +35,7 @@ namespace EX03.GarageLogic.entities.EnergySourceTypes
             }
         }
 
-        public void FillEnergy(float i_EnergyToAdd)
+        public virtual void FillEnergy(float i_EnergyToAdd)
         {
             float totalEnergy = i_EnergyToAdd + CurrentEnergyAmount;
 
@@ -43,9 +43,13 @@ namespace EX03.GarageLogic.entities.EnergySourceTypes
             {
                 throw new ValueOutOfRangeException(totalEnergy, MaxEnergyAmount);
             }
-
-            this.m_CurrentEnergyAmount += i_EnergyToAdd;
+            else
+            {
+                this.m_CurrentEnergyAmount += i_EnergyToAdd;
+            }
         }
+
+        public abstract void FillEnergy(float i_EnergyToAdd, eFuelType i_FuelType);
 
         public float EnergyLeftPrecentage()
         {
