@@ -108,7 +108,8 @@ namespace EX03.ConsoleUI
 
             if(!m_GarageManager.IsVehicleExistsInTheGarage(o_LicenseNumber))
             {
-
+                string vehicleType =  getVehicleInput();
+                
             }
             else
             {
@@ -120,6 +121,39 @@ namespace EX03.ConsoleUI
 
 
 
+        }
+
+        private string getVehicleInput()
+        {
+            bool validInputFromUser = false;
+            string vehicleType = null;
+
+            Console.WriteLine("Please insert vehicle's type: FuelCar, ElectricCar, FuelMotorcycle, ElectricMotorcycle, Truck (without spaces!)");
+            
+            do
+            {
+                vehicleType = Console.ReadLine();
+
+                if(!isOneOfVehicles(vehicleType))
+                {
+                    Console.WriteLine($@"There's no {vehicleType} exists. Please enter again: ");
+                }
+                else
+                {
+                    validInputFromUser = true;
+                }
+            }
+            while(!validInputFromUser);
+
+            return vehicleType;
+        }
+
+        private bool isOneOfVehicles(string i_VehicleType)
+        {
+            return i_VehicleType.ToUpper().Equals("ELECTRICCAR") || i_VehicleType.ToUpper().Equals("FUELCAR")
+                                                                 || i_VehicleType.ToUpper().Equals("TRUCK")
+                                                                 || i_VehicleType.ToUpper().Equals("ELECTRICMOTORCYCLE")
+                                                                 || i_VehicleType.ToUpper().Equals("FUELCAR");
         }
 
         private void getLicenseNumber(out string o_LicenseNumber)
