@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,5 +47,21 @@ namespace EX03.GarageLogic
         {
 
         } */
+        public string[] ShowAllLicensesWithFilterOption(int i_ServiceStatus) //returns only arrays after filtering.
+        {
+           List<string> licenseArray = new List<string>();
+           GarageForm.eServiceStatus serviceStatus = (GarageForm.eServiceStatus)Enum.
+               ToObject(typeof(GarageForm.eServiceStatus), i_ServiceStatus);
+
+           foreach(KeyValuePair<string, GarageForm> form in r_GarageForms)
+           {
+               if(form.Value.ServiceStatus == serviceStatus)
+               {
+                   licenseArray.Add(form.Value.Vehicle.LicenseNumber);
+               }
+           }
+
+           return licenseArray.ToArray();
+        }
     }
 }

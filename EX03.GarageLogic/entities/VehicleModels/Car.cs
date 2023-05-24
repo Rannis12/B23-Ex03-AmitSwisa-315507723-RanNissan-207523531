@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EX03.GarageLogic.entities.VehicleModels
 {
-    class Car : Vehicle
+    public class Car : Vehicle
     {
         public enum eColor
         {

@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="DTO\VehiclePossibleData.cs" />
     <Compile Include="entities\Factory\VehicleFactory.cs" />
     <Compile Include="entities\GarageClient.cs" />
     <Compile Include="entities\GarageForm.cs" />
