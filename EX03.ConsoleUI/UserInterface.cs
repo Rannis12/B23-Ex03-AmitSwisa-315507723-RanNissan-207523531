@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Services;
 using System.Text;
 using System.Threading.Tasks;
 using EX03.GarageLogic;
 using EX03.GarageLogic.entities;
+using EX03.GarageLogic.entities.Factory;
 
 namespace EX03.ConsoleUI
 {
@@ -77,7 +79,7 @@ namespace EX03.ConsoleUI
                     showAllLicensesWithFilterOption();
                     break;
                 case eMenuOptions.ChangeVehicleStatusInTheGarage:
-                    
+                    changeVehicleStatusInGarage();
                     break;
                 case eMenuOptions.InflateVehicleWheelsToMaximum:
                     
@@ -98,6 +100,34 @@ namespace EX03.ConsoleUI
             }
         }
 
+        private void changeVehicleStatusInGarage()
+        {
+            
+        }
+
+        private void showAllLicensesWithFilterOption()
+        {
+            int selection;
+
+            do
+            {
+                selection = readIntegerInputFromUser();
+                selection += 1;
+            }
+            while(selection >= 1 || selection <= 4);
+            
+            string[] filteredLicenseArray = m_GarageManager.ShowAllLicensesWithFilterOption(selection);
+
+            GarageForm.eServiceStatus serviceStatus = (GarageForm.eServiceStatus)Enum.
+                ToObject(typeof(GarageForm.eServiceStatus), selection);
+
+            Console.WriteLine($@"The licenses after the filter {serviceStatus} is:");
+            foreach(string license in filteredLicenseArray)
+            {
+                Console.WriteLine(license);
+            }
+        }
+
         private void insertNewVehicleToTheGarage()
         {
             string o_LicenseNumber;
@@ -113,7 +143,8 @@ namespace EX03.ConsoleUI
                 getClientNameAndPhoneNumber(out o_PhoneNumber, out o_ClientName);
 
                 string vehicleType =  getVehicleInput();
-                enterVehicleData();
+
+                collectVehicleData(vehicleType);
             }
             else
             {
@@ -123,10 +154,111 @@ namespace EX03.ConsoleUI
             }
 
 
-
-            //VehicleFactory.Get
         }
 
+        private void collectVehicleData(string i_VehicleType)
+        {
+            VehicleFactory.eVehicleTypes vehicleType = (VehicleFactory.eVehicleTypes)Enum.ToObject(
+                typeof(VehicleFactory.eVehicleTypes),
+                i_VehicleType);
+
+            float energyToDrive= 0;
+            bool isValidInput = false;
+
+            if(isElectricVehicle(i_VehicleType))
+            {
+                Console.WriteLine("Please enter battery percentage amount: ");
+            }
+            else
+            {
+                Console.WriteLine("Please enter fuel amount: ");
+            }
+
+            energyToDrive = readFloatInputFromUser();
+
+            Console.WriteLine("Please enter wheel pressure: ");
+
+            float wheelsPressure = readFloatInputFromUser();
+
+            if(vehicleType == VehicleFactory.eVehicleTypes.ElectricCar || vehicleType == VehicleFactory.eVehicleTypes.FuelCar)
+            {
+                Console.WriteLine("Please enter car color: ");
+
+
+                //handle errors, and get input (there a method named getFloatInputFromUser)
+
+            }
+
+            else if(vehicleType == VehicleFactory.eVehicleTypes.Truck)
+            {
+                Console.WriteLine("Is your truck delivers hazardous materials? (answer yes/no)");
+
+                //handle errors, and get input (there a method named getFloatInputFromUser)
+            }
+            else 
+            {
+                Console.WriteLine("Please enter motorcycle licenseType: ");
+
+                //handle errors, and get input (there a method named getFloatInputFromUser)
+            }
+
+
+            //creating the vehicle.
+
+        }
+        private int readIntegerInputFromUser()
+        {
+            bool isValidInput = false;
+            int integerInput;
+
+            do
+            {
+                string userInput = Console.ReadLine();
+
+                if (!int.TryParse(userInput, out integerInput))
+                {
+                    Console.WriteLine("Please make sure you insert a number.");
+                }
+                else
+                {
+                    isValidInput = true;
+                }
+            }
+            while (!isValidInput);
+
+            return integerInput;
+        }
+
+        private float readFloatInputFromUser()
+        {
+            bool isValidInput = false;
+            float floatInput;
+
+            do
+            {
+                string userInput = Console.ReadLine();
+
+                if (!float.TryParse(userInput, out floatInput))
+                {
+                    Console.WriteLine("Please make sure you insert a number.");
+                }
+                else
+                {
+                    isValidInput = true;
+                }
+            }
+            while (!isValidInput);
+
+            return floatInput;
+            ;
+        }
+        private bool isElectricVehicle(string i_VehicleType)
+        {
+            bool isElectric = i_VehicleType.ToUpper().Equals("ElectricCar".ToUpper())
+                              || i_VehicleType.ToUpper().Equals("ElectricMotorcycle".ToUpper());
+
+            return isElectric;
+        }
         private void getClientNameAndPhoneNumber(out string o_PhoneNumber, out string o_ClientName)
         {
             bool isValidNumber = false;
@@ -195,11 +327,23 @@ namespace EX03.ConsoleUI
 
         private bool isOneOfVehicles(string i_VehicleType)
         {
-            return i_VehicleType.ToUpper().Equals("ELECTRICCAR") 
-                || i_VehicleType.ToUpper().Equals("FUELCAR")                                            
-                || i_VehicleType.ToUpper().Equals("TRUCK")         
-                || i_VehicleType.ToUpper().Equals("ELECTRICMOTORCYCLE")                                         
-                || i_VehicleType.ToUpper().Equals("FUELCAR");
+            bool isValidVehicle = false;
+            string[] arrayOfVehicles = VehicleFactory.GetVehiclesTypesAsArray();
+
+            foreach(string vehicleType in arrayOfVehicles)
+            {
+                if(vehicleType.ToUpper().Equals(i_VehicleType.ToUpper()))
+                {
+                    isValidVehicle = true;
+                    break;
+                }
+            }
+            //return i_VehicleType.ToUpper().Equals("ELECTRICCAR") 
+            //    || i_VehicleType.ToUpper().Equals("FUELCAR")                                            
+            //    || i_VehicleType.ToUpper().Equals("TRUCK")         
+            //    || i_VehicleType.ToUpper().Equals("ELECTRICMOTORCYCLE")                                         
+            //    || i_VehicleType.ToUpper().Equals("FUELCAR");
+            return isValidVehicle;
         }
 
         private void getLicenseNumber(out string o_LicenseNumber)
@@ -219,7 +363,6 @@ namespace EX03.ConsoleUI
                 }
             } while (!isValidNumber);
         }
-
 
         private bool isValidLicenseNumber(string i_licenseNumber)
         {

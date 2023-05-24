@@ -22,8 +22,5 @@ namespace EX03.GarageLogic.entities.Factory
         {
             return Enum.GetNames(typeof(eVehicleTypes));
         }
-
-        
-
     }
 }
