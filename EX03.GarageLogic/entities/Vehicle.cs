@@ -14,6 +14,14 @@ namespace EX03.GarageLogic.entities
         private Wheel[] m_Wheels;
         protected EnergySource m_EnergySource;
 
+        public string Model
+        {
+            get
+            {
+                return this.m_Model;
+            }
+        }
+        
         public string LicenseNumber
         {
             get
@@ -66,5 +74,7 @@ namespace EX03.GarageLogic.entities
         {
             this.m_Model = i_Model;
         }
+
+        public abstract List<string> GetSpecificInfo();
     }
 }
