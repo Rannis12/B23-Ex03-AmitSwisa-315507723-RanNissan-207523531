@@ -69,13 +69,22 @@ namespace EX03.GarageLogic.entities.Factory
                     addGenericMotorcycleQuestions(ref questionsList);
                     break;
                 case eVehicleTypes.Truck:
-                    
+                    addTruckQuestions(ref questionsList);
                     break;
                 default:
                     throw new ArgumentException("This type of car doesnt exist.");
             }
 
             return questionsList;
+        }
+
+        private static void addTruckQuestions(ref List<KeyValuePair<Type, string>> i_QuestionsList)
+        {
+            i_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(bool), 
+                "Does the truck loads hazard materials? "));
+            
+            i_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(float), 
+                "What is the cargo capacity? "));
         }
 
         private static void addGenericMotorcycleQuestions(ref List<KeyValuePair<Type, string>> i_QuestionsList)
