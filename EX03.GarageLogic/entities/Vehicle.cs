@@ -23,7 +23,7 @@ namespace EX03.GarageLogic.entities
         }
 
         internal Vehicle(string i_LicenseNumber, int i_NumberOfWheels, int i_MaximumWheelsAirPressure)
-        {           
+        {
             this.r_LicenseNumber = i_LicenseNumber;
             this.m_Wheels = new Wheel[i_NumberOfWheels];
 
@@ -31,6 +31,11 @@ namespace EX03.GarageLogic.entities
             {
                 m_Wheels[i] = new Wheel(i_MaximumWheelsAirPressure);
             }
+        }
+
+        public int GetNumOfWheels()
+        {
+            return this.m_Wheels.Length;
         }
     }
 }
