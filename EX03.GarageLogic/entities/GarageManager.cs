@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EX03.GarageLogic.entities;
 using EX03.GarageLogic.entities.EnergySourceTypes;
+using EX03.GarageLogic.entities.Factory;
 
 namespace EX03.GarageLogic
 {
@@ -63,5 +64,10 @@ namespace EX03.GarageLogic
 
            return licenseArray.ToArray();
         }
+        public string[] GetSupportedVehiclesTypes()
+        {
+            return Enum.GetNames(typeof(VehicleFactory.eVehicleTypes));
+        }
     }
+    
 }

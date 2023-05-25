@@ -102,17 +102,17 @@ namespace EX03.ConsoleUI
 
         private void changeVehicleStatusInGarage()
         {
-            string licenseNumber;
+            
 
             Console.WriteLine(VehicleFactory.GeneralQuestions[0].Value);
 
-            getLicenseNumber(out licenseNumber);
+            string licenseNumber = getLicenseNumberFromClient();
 
             Console.WriteLine(VehicleFactory.GeneralQuestions[1].Value);
 
             GarageForm.eServiceStatus serviceStatus = getVehicleStatusSelectionFromUser();
 
-
+            // TODO - FINISH
 
         }
 
@@ -177,19 +177,17 @@ namespace EX03.ConsoleUI
 
         private void insertNewVehicleToTheGarage()
         {
-            string o_LicenseNumber;
             string o_PhoneNumber;
             string o_ClientName;
             
             Console.WriteLine("Please Enter License Number of your car: ");
+            string licenseNumber = getLicenseNumberFromClient();
 
-            getLicenseNumber(out o_LicenseNumber);
-
-            if(!m_GarageManager.IsVehicleExistsInTheGarage(o_LicenseNumber))
+            if(!m_GarageManager.IsVehicleExistsInTheGarage(licenseNumber))
             {
                 getClientNameAndPhoneNumber(out o_PhoneNumber, out o_ClientName);
 
-                string vehicleType =  getVehicleInput();
+                string vehicleType = getVehicleInput();
 
                 collectVehicleData(vehicleType);
             }
@@ -197,7 +195,7 @@ namespace EX03.ConsoleUI
             {
                 Console.WriteLine("The vehicle already in the garage!");
 
-                m_GarageManager.ChangeVehicleStatusInTheGarage(o_LicenseNumber, GarageForm.eServiceStatus.InRepair);
+                m_GarageManager.ChangeVehicleStatusInTheGarage(licenseNumber, GarageForm.eServiceStatus.InRepair);
             }
         }
 
@@ -350,7 +348,7 @@ namespace EX03.ConsoleUI
             bool validInputFromUser = false;
             string vehicleType = null;
 
-            Console.WriteLine("Please insert vehicle's type: FuelCar, ElectricCar, FuelMotorcycle, ElectricMotorcycle, Truck (without spaces!)");
+            Console.WriteLine("Choose your vehicle type: " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!)");
             
             do
             {
@@ -391,14 +389,15 @@ namespace EX03.ConsoleUI
             return isValidVehicle;
         }
 
-        private void getLicenseNumber(out string o_LicenseNumber)
+        private string getLicenseNumberFromClient()
         {
+            string licenseNumberResponse = "";
             bool isValidNumber = false;
             do
             {
-                o_LicenseNumber = Console.ReadLine();
+                licenseNumberResponse = Console.ReadLine();
 
-                if (isValidLicenseNumber(o_LicenseNumber))
+                if (isValidLicenseNumber(licenseNumberResponse))
                 {
                     Console.WriteLine("This is isn't a valid license number. please insert again.");
                 }
@@ -407,6 +406,8 @@ namespace EX03.ConsoleUI
                     isValidNumber = true;
                 }
             } while (!isValidNumber);
+
+            return licenseNumberResponse;
         }
 
         private bool isValidLicenseNumber(string i_licenseNumber)
