@@ -50,5 +50,10 @@ namespace EX03.GarageLogic.entities.EnergySourceTypes
             }
         }
 
+        public static string[] getFuelTypes()
+        {
+            return Enum.GetNames(typeof(eFuelType));
+        }
+
     }
 }

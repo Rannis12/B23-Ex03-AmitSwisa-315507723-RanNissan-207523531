@@ -38,5 +38,10 @@ namespace EX03.GarageLogic.entities
                 this.m_CurrentTirePressure = totalPressure;
             }
         }
+
+        public void InflateTireToMaximum()
+        {
+            inflateTire(r_MaximumTirePressure - m_CurrentTirePressure);
+        }
     }
 }

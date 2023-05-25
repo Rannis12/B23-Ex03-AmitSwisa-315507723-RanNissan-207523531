@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using EX03.GarageLogic;
 using EX03.GarageLogic.entities;
+using EX03.GarageLogic.entities.EnergySourceTypes;
 using EX03.GarageLogic.entities.Factory;
 using EX03.GarageLogic.entities.VehicleModels;
 
@@ -83,10 +84,10 @@ namespace EX03.ConsoleUI
                     changeVehicleStatusInGarage();
                     break;
                 case eMenuOptions.InflateVehicleWheelsToMaximum:
-                    
+                    inflateVehicleWheelsToMaximum();
                     break;
                 case eMenuOptions.RefuelRegularVehicle:
-                    
+                    refuelRegularVehicle();
                     break;
                 case eMenuOptions.RefuelElectricVehicle:
                     
@@ -101,10 +102,78 @@ namespace EX03.ConsoleUI
             }
         }
 
+        private void refuelRegularVehicle()
+        {
+            Console.WriteLine("Please enter car's license number: ");
+
+            string licenseNumber = getLicenseNumberFromClient();
+            string[] fuelTypes = FuelEnergy.getFuelTypes();
+            int i = 1;
+            bool isValidSelection = false;
+            int fuelTypeSelection;
+
+            Console.WriteLine("Please enter the fuel type you would like to fill with: ");
+            
+            foreach(string fuelType in fuelTypes)
+            {
+                Console.WriteLine($"{i}. {fuelType}");
+            }
+
+            do
+            {
+                fuelTypeSelection = readIntegerInputFromUser();
+
+                if (!(fuelTypeSelection >= 1 && fuelTypeSelection <= 4))
+                {
+                    Console.WriteLine("Please enter a valid option from the menu. ");
+                }
+                else
+                {
+                    isValidSelection = true;
+                }
+            }
+            while(!isValidSelection);
+
+            Console.WriteLine("Please enter amount to fill: ");
+
+            float amountToFill = readFloatInputFromUser();
+
+            try
+            {
+                m_GarageManager.RefuelRegularVehicle(
+                    licenseNumber,
+                    (FuelEnergy.eFuelType)Enum.ToObject(typeof(FuelEnergy.eFuelType), fuelTypeSelection),
+                    amountToFill);
+            }
+            catch(ArgumentException ae)
+            {
+
+            }
+            
+            
+
+
+
+        }
+
+        private void inflateVehicleWheelsToMaximum()
+        {
+            Console.WriteLine("Please enter your car's license number: ");
+            string licenseNumber = getLicenseNumberFromClient();
+
+            try
+            {
+                m_GarageManager.InflateWheelsToMaximum(licenseNumber);
+            }
+            catch(KeyNotFoundException knfe)
+            {
+                Console.WriteLine(knfe.Message);
+            }
+        }
+
         private void changeVehicleStatusInGarage()
         {
             
-
             Console.WriteLine(VehicleFactory.GeneralQuestions[0].Value);
 
             string licenseNumber = getLicenseNumberFromClient();

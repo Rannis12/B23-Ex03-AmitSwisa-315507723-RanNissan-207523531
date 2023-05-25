@@ -37,7 +37,21 @@ namespace EX03.GarageLogic.entities
         {
             return this.m_Wheels.Length;
         }
-        
-        
+
+        public Wheel[] Wheels
+        {
+            get
+            {
+                return m_Wheels;
+            }
+        }
+
+        public EnergySource EnergySource
+        {
+            get
+            {
+                return m_EnergySource;
+            }
+        }
     }
 }

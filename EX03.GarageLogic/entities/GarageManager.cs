@@ -34,7 +34,15 @@ namespace EX03.GarageLogic
 
         public void RefuelRegularVehicle(string i_LicenseNumber, FuelEnergy.eFuelType i_eFuelType, float i_AmountToFill)
         {
-            //r_GarageForms[i_LicenseNumber].Vehicle.
+            if(r_GarageForms.ContainsKey(i_LicenseNumber))
+            {
+                r_GarageForms[i_LicenseNumber].Vehicle.EnergySource.FillEnergy(i_AmountToFill, i_eFuelType);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"The license number {i_LicenseNumber} doesn't exists in the garage.");
+            }
+            
         }
 
         public void RefuelElectricVehicle(string i_LicenseNumber, float i_AmountToFill)
@@ -80,6 +88,21 @@ namespace EX03.GarageLogic
         public List<KeyValuePair<Type, string>> GetClientVehicleForm(string i_eVehicleType)
         {
             return VehicleFactory.GetSpecificVehicleQuestions(i_eVehicleType);
+        }
+
+        public void InflateWheelsToMaximum(string i_LicenseNumber)
+        {
+            if(r_GarageForms.ContainsKey(i_LicenseNumber))
+            {
+                foreach(Wheel wheel in r_GarageForms[i_LicenseNumber].Vehicle.Wheels)
+                {
+                    wheel.InflateTireToMaximum();
+                }
+            }
+            else
+            {
+                throw new KeyNotFoundException($"The license number {i_LicenseNumber} doesn't exists in the garage.");
+            }
         }
     }
     
