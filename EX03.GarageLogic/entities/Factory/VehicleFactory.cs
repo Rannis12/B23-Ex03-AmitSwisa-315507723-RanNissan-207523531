@@ -106,7 +106,16 @@ namespace EX03.GarageLogic.entities.Factory
             io_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(eNumOfDoors), 
                 "How many doors do the car have? " + numOfDoorsOptions.ToString()));
         }
-        
+
+        public static Vehicle CreateVehicle(eVehicleTypes i_VehicleType, List<Object> i_Params)
+        {
+            // TODO - Switch(i_VehicleType).
+            // TODO - same case for *both* car types.
+            // TODO - same case for *both* motorcycle types.
+            // TODO - case for truck car type.
+            return null;
+        }
+
         /*private static void addElectricCarQuestions(ref List<KeyValuePair<Type, string>> i_QuestionsList)
         {
             addGenericCarQuestions(ref i_QuestionsList);

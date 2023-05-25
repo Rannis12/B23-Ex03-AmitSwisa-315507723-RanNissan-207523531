@@ -68,6 +68,11 @@ namespace EX03.GarageLogic
         {
             return Enum.GetNames(typeof(VehicleFactory.eVehicleTypes));
         }
+
+        public List<KeyValuePair<Type, string>> GetClientVehicleForm(VehicleFactory.eVehicleTypes i_eVehicleType)
+        {
+            return VehicleFactory.GetSpecificVehicleQuestions(i_eVehicleType);
+        }
     }
     
 }

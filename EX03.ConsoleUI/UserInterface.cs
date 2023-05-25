@@ -177,15 +177,14 @@ namespace EX03.ConsoleUI
 
         private void insertNewVehicleToTheGarage()
         {
-            string o_PhoneNumber;
-            string o_ClientName;
-            
             Console.WriteLine("Please Enter License Number of your car: ");
             string licenseNumber = getLicenseNumberFromClient();
-
+            
             if(!m_GarageManager.IsVehicleExistsInTheGarage(licenseNumber))
             {
-                getClientNameAndPhoneNumber(out o_PhoneNumber, out o_ClientName);
+                string clientName = getClientName();
+                
+                string phoneNumber = getClientPhoneNumber();
 
                 string vehicleType = getVehicleInput();
 
@@ -199,13 +198,25 @@ namespace EX03.ConsoleUI
             }
         }
 
+        // TODO - i_VehicleType should be int.
         private void collectVehicleData(string i_VehicleType)
         {
             VehicleFactory.eVehicleTypes vehicleType = (VehicleFactory.eVehicleTypes)Enum.ToObject(
                 typeof(VehicleFactory.eVehicleTypes),
                 i_VehicleType);
 
-            float energyToDrive= 0;
+            List<KeyValuePair<Type, string>> clientForm 
+                = this.m_GarageManager.GetClientVehicleForm(vehicleType);
+            
+            /*
+             * TODO 1. for each clientForm element, receive input from user to object element.
+             * TODO 2. Make sure constructor of element is in same order as questions.
+             * TODO 3. Insert new vehicle using GameManager function (That will call VehicleFactory).
+             * TODO -  Insert client (if not already exist).
+             */
+            
+            
+            /*float energyToDrive= 0;
             bool isValidInput = false;
 
             if(isElectricVehicle(i_VehicleType))
@@ -243,7 +254,7 @@ namespace EX03.ConsoleUI
                 Console.WriteLine("Please enter motorcycle licenseType: ");
 
                 //handle errors, and get input (there a method named getFloatInputFromUser)
-            }
+            }*/
 
 
             //creating the vehicle.
@@ -295,27 +306,26 @@ namespace EX03.ConsoleUI
             return floatInput;
             ;
         }
-        private bool isElectricVehicle(string i_VehicleType)
-        {
-            bool isElectric = i_VehicleType.ToUpper().Equals("ElectricCar".ToUpper())
-                              || i_VehicleType.ToUpper().Equals("ElectricMotorcycle".ToUpper());
 
-            return isElectric;
-        }
-        private void getClientNameAndPhoneNumber(out string o_PhoneNumber, out string o_ClientName)
+        private string getClientName()
         {
-            bool isValidNumber = false;
-
             Console.WriteLine("Please enter your name:");
-            o_ClientName = Console.ReadLine();
+            string clientName = Console.ReadLine();
+            return clientName;
+        }
+        
+        private string getClientPhoneNumber()
+        {
+            string phoneNumber = "";
+            bool isValidNumber = false;
 
             Console.WriteLine("Please enter your phone number: ");
 
             do
             {
-                o_PhoneNumber = Console.ReadLine();
+                phoneNumber = Console.ReadLine();
 
-                if(!isValidPhoneNumber(o_PhoneNumber))
+                if(!isValidPhoneNumber(phoneNumber))
                 {
                     Console.WriteLine("invalid phone number. Please try again: ");
                 }
@@ -325,6 +335,8 @@ namespace EX03.ConsoleUI
                 }
             }
             while(!isValidNumber);
+
+            return phoneNumber;
         }
 
         private bool isValidPhoneNumber(string i_PhoneNumber)
@@ -343,12 +355,15 @@ namespace EX03.ConsoleUI
             return isValidNumber;
         }
 
+        // TODO - Should receive int value of vehicle type.
+        // TODO - Change VehicleFactory.GetVehiclesTypesAsArray to modify array from ElectricCar to 1. Electric car.
+        // TODO  - read index and verify existance.
         private string getVehicleInput()
         {
             bool validInputFromUser = false;
             string vehicleType = null;
 
-            Console.WriteLine("Choose your vehicle type: " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!)");
+            Console.WriteLine("Choose your vehicle type " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!): ");
             
             do
             {
