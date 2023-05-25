@@ -16,5 +16,21 @@ namespace EX03.GarageLogic.entities
             m_ClientName = i_ClientName;
             m_PhoneNumber = i_PhoneNumber;
         }
+
+        public string ClientName
+        {
+            get
+            {
+                return m_ClientName;
+            }
+        }
+
+        public string PhoneNumber
+        {
+            get
+            {
+                return m_PhoneNumber;
+            }
+        }
     }
 }
