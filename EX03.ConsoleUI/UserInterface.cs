@@ -173,12 +173,9 @@ namespace EX03.ConsoleUI
 
         private void changeVehicleStatusInGarage()
         {
-            
-            Console.WriteLine(VehicleFactory.GeneralQuestions[0].Value);
-
             string licenseNumber = getLicenseNumberFromClient();
 
-            Console.WriteLine(VehicleFactory.GeneralQuestions[1].Value);
+            string clientName = getClientName();
 
             GarageForm.eServiceStatus serviceStatus = getVehicleStatusSelectionFromUser();
 
@@ -247,7 +244,6 @@ namespace EX03.ConsoleUI
 
         private void insertNewVehicleToTheGarage()
         {
-            Console.WriteLine("Please Enter License Number of your car: ");
             string licenseNumber = getLicenseNumberFromClient();
             
             if(!m_GarageManager.IsVehicleExistsInTheGarage(licenseNumber))
@@ -273,74 +269,66 @@ namespace EX03.ConsoleUI
             }
         }
 
-        // TODO - i_VehicleType should be int.
-        private void FillClientForm()
+        private string getClientName()
         {
             Console.WriteLine("Whats your name?");
             string clientName = getClientResponse();
+            return clientName;
+        }
+
+        // TODO - i_VehicleType should be int.
+        private void FillClientForm()
+        {
+            string clientName = getClientName();
                 
             Console.WriteLine("What is your phone number?");
-            string phoneNumber = getClientResponse();
+            string phoneNumber = getPhoneNumber();
 
             Console.WriteLine("Choose your vehicle type " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!): ");
-            string vehicleType = getClientResponse();
+            int vehicleType = getVehicleTypeFromClient();
+            
+            Console.WriteLine("Model name:");
+            string modelName = getClientResponse();
+            
+            Console.WriteLine("Remaining energy in you vehicle?");
+            float remainingEnergyInEnergySource = readFloatInputFromUser();
+            
+            Console.WriteLine("Wheels manifacturer name?");
+            string wheelsManufacturerName = getClientResponse();
 
-            List<KeyValuePair<Type, string>> clientForm 
+            Console.WriteLine("Wheels air pressure?");
+            float wheelsCurrentAirPressure = readFloatInputFromUser();
+            
+            List<string> vehicleQuestions 
                 = this.m_GarageManager.GetClientVehicleForm(vehicleType);
+
+            List<Object> clientAnswers = new List<Object>();
+
+            foreach(string question in vehicleQuestions)
+            {
+                Console.WriteLine(question);
+                string res = getClientResponse();
+                
+                clientAnswers.Add(res);
+            }
             
-            /*
-             * TODO 1. for each clientForm element, receive input from user to object element.
-             * TODO 2. Make sure constructor of element is in same order as questions.
-             * TODO 3. Insert new vehicle using GameManager function (That will call VehicleFactory).
-             * TODO -  Insert client (if not already exist).
-             */
+            // TODO - make car.
 
-            
-            
-            /*float energyToDrive= 0;
-            bool isValidInput = false;
-
-            if(isElectricVehicle(i_VehicleType))
-            {
-                Console.WriteLine("Please enter battery percentage amount: ");
-            }
-            else
-            {
-                Console.WriteLine("Please enter fuel amount: ");
-            }
-
-            energyToDrive = readFloatInputFromUser();
-
-            Console.WriteLine("Please enter wheel pressure: ");
-
-            float wheelsPressure = readFloatInputFromUser();
-
-            if(vehicleType == VehicleFactory.eVehicleTypes.ElectricCar || vehicleType == VehicleFactory.eVehicleTypes.FuelCar)
-            {
-                Console.WriteLine("Please enter car color: ");
-
-
-                //handle errors, and get input (there a method named getFloatInputFromUser)
-
-            }
-
-            else if(vehicleType == VehicleFactory.eVehicleTypes.Truck)
-            {
-                Console.WriteLine("Is your truck delivers hazardous materials? (answer yes/no)");
-
-                //handle errors, and get input (there a method named getFloatInputFromUser)
-            }
-            else 
-            {
-                Console.WriteLine("Please enter motorcycle licenseType: ");
-
-                //handle errors, and get input (there a method named getFloatInputFromUser)
-            }*/
-
-
-            //creating the vehicle.
 
         }
+
+        private string getPhoneNumber()
+        {
+            string phoneNumber = getClientResponse();
+
+            if(!isValidPhoneNumber(phoneNumber))
+            {
+                throw new ArgumentException("Phone number is invalid.");
+            }
+
+            return phoneNumber;
+        }
+
         private int readIntegerInputFromUser()
         {
             bool isValidInput = false;
@@ -366,26 +354,16 @@ namespace EX03.ConsoleUI
 
         private float readFloatInputFromUser()
         {
-            bool isValidInput = false;
+            string userInput = Console.ReadLine();
+            
             float floatInput;
 
-            do
+            if (!float.TryParse(userInput, out floatInput))
             {
-                string userInput = Console.ReadLine();
-
-                if (!float.TryParse(userInput, out floatInput))
-                {
-                    Console.WriteLine("Please make sure you insert a number.");
-                }
-                else
-                {
-                    isValidInput = true;
-                }
+                throw new ArgumentException("Please enter a valid air pressure.");
             }
-            while (!isValidInput);
 
             return floatInput;
-            ;
         }
         
         private string getClientResponse()
@@ -412,41 +390,34 @@ namespace EX03.ConsoleUI
         
         private int getVehicleTypeFromClient()
         {
-            bool validInputFromUser = false;
-            int vehicleType = -1;
+            Console.WriteLine("Choose your vehicle type: ");
 
-            Console.WriteLine("Choose your vehicle type " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!): ");
-            
-            do
+            string[] vehicleTypes = this.m_GarageManager.GetSupportedVehiclesTypes();
+
+            for(int i = 1; i <= vehicleTypes.Length; i++)
             {
-                string vehicleTypeAsString = Console.ReadLine();
-
-                try
-                {
-                    if(vehicleTypeAsString != null)
-                    {
-                        if(!this.m_GarageManager.IsVehicleTypeExist(vehicleTypeAsString))
-                        {
-                            throw new ArgumentOutOfRangeException("Vehicle type doesnt exist.");
-                        }
-                        else
-                        {
-                            validInputFromUser = true;
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine($@"There's no {vehicleTypeAsString} exists. Please enter again: ");
-                }
+                Console.WriteLine(i + ". " + vehicleTypes[i-1]);
             }
-            while(!validInputFromUser);
+            
+            string vehicleTypeAsString = Console.ReadLine();
+
+            int vehicleType;
+           
+            try
+            {
+                vehicleType = int.Parse(vehicleTypeAsString);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Vehicle type doesn't exist in our system.");
+            }
 
             return vehicleType;
         }
         
         private string getLicenseNumberFromClient()
         {
+            Console.WriteLine("Please Enter License Number of your car: ");
             string licenseNumberResponse = "";
             bool isValidNumber = false;
             do

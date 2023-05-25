@@ -79,13 +79,7 @@ namespace EX03.GarageLogic
             return VehicleFactory.GetVehiclesTypesAsArray();
         }
 
-        public bool IsVehicleTypeExist(string i_VehicleType)
-        {
-            VehicleFactory.eVehicleTypes enumValue;
-            return Enum.TryParse(i_VehicleType, out enumValue);
-        }
-
-        public List<KeyValuePair<Type, string>> GetClientVehicleForm(string i_eVehicleType)
+        public List<string> GetClientVehicleForm(int i_eVehicleType)
         {
             return VehicleFactory.GetSpecificVehicleQuestions(i_eVehicleType);
         }

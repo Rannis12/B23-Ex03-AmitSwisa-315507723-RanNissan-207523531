@@ -21,41 +21,25 @@ namespace EX03.GarageLogic.entities.Factory
             Truck = 5
         }
 
-        private static readonly List<KeyValuePair<Type, string>> sr_DataMembersInfo;
-
-        public static List<KeyValuePair<Type, string>> GeneralQuestions
-        {
-            get
-            {
-                return sr_DataMembersInfo;
-            }
-        }
-        
-        static VehicleFactory()
-        {
-            sr_DataMembersInfo = new List<KeyValuePair<Type, string>>();
-            initDataMembersInfo();
-        }
-
-        private static void initDataMembersInfo()
-        {
-            sr_DataMembersInfo.Add(new KeyValuePair<Type, string>(typeof(float), "Vehicle current energy amount: "));
-            sr_DataMembersInfo.Add(new KeyValuePair<Type, string>(typeof(float), "What is your current air pressure in wheel number [number]? "));
-        }
-
         public static string[] GetVehiclesTypesAsArray()
         {
             return Enum.GetNames(typeof(eVehicleTypes));
         }
 
-        public static List<KeyValuePair<Type, string>> GetSpecificVehicleQuestions(string i_VehicleType)
+        public static List<string> GetSpecificVehicleQuestions(int i_VehicleType)
         {
-            List<KeyValuePair<Type, string>> questionsList = new List<KeyValuePair<Type, string>>();
-            
-            questionsList.Add(new KeyValuePair<Type, string>(typeof(float), 
-                "How much air pressure does your tiers have? "));
+            List<string> questionsList = new List<string>();
 
-            eVehicleTypes enumValue = (eVehicleTypes)Enum.ToObject(typeof(eVehicleTypes), i_VehicleType);
+            eVehicleTypes enumValue;
+            
+            try
+            {
+                enumValue = (eVehicleTypes)Enum.ToObject(typeof(eVehicleTypes), i_VehicleType);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Vehicle type doesn't exist in our system.");
+            }
 
             switch(enumValue)
             {
@@ -81,50 +65,31 @@ namespace EX03.GarageLogic.entities.Factory
             return questionsList;
         }
 
-        private static void addTruckQuestions(ref List<KeyValuePair<Type, string>> io_QuestionsList)
+        private static void addTruckQuestions(ref List<string> io_QuestionsList)
         {
-            io_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(bool), 
-                "Does the truck loads hazard materials? "));
+            io_QuestionsList.Add("Does the truck loads hazard materials? ");
             
-            io_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(float), 
-                "What is the cargo capacity? "));
+            io_QuestionsList.Add("What is the cargo capacity? ");
         }
 
-        private static void addGenericMotorcycleQuestions(ref List<KeyValuePair<Type, string>> io_QuestionsList)
+        private static void addGenericMotorcycleQuestions(ref List<string> io_QuestionsList)
         {
             string[] licenseTypes = Enum.GetNames(typeof(Motorcycle.eLicenseType));
-            io_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(Motorcycle.eLicenseType), 
-                "What is the license type of the motorcycle? " + licenseTypes));
+            io_QuestionsList.Add("What is the license type of the motorcycle? " + licenseTypes);
             
             string[] numOfDoorsOptions = Enum.GetNames(typeof(eNumOfDoors));
-            io_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(int), 
-                "What is the engine capacity of the motorcycle? "));
+            io_QuestionsList.Add("What is the engine capacity of the motorcycle? ");
         }
 
-        private static void addGenericCarQuestions(ref List<KeyValuePair<Type, string>> io_QuestionsList)
+        private static void addGenericCarQuestions(ref List<string> io_QuestionsList)
         {
             string[] carColors = Enum.GetNames(typeof(eColor));
-            io_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(eColor), 
-                "What is the color of the car? " + carColors.ToString()));
+            io_QuestionsList.Add("What is the color of the car? " + carColors.ToString());
             
             string[] numOfDoorsOptions = Enum.GetNames(typeof(eNumOfDoors));
-            io_QuestionsList.Add(new KeyValuePair<Type, string>(typeof(eNumOfDoors), 
-                "How many doors do the car have? " + numOfDoorsOptions.ToString()));
+            io_QuestionsList.Add("How many doors do the car have? " + numOfDoorsOptions.ToString());
         }
 
-        public static bool isVehicleTypeExist(string i_VehicleType)
-        {
-            eVehicleTypes enumValue;
-            try
-            {
-                return Enum.TryParse(i_VehicleType, out enumValue);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        
         public static Vehicle CreateVehicle(eVehicleTypes i_VehicleType, List<Object> i_Params)
         {
             // TODO - Switch(i_VehicleType).

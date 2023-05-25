@@ -36,10 +36,5 @@ namespace EX03.GarageLogic.entities.VehicleModels
             this.r_NumOfDoors = i_NumOfDoors;
         }
 
-        public static int GetNumOfWheels()
-        {
-            return k_NumOfWheels;
-        }
-
     }
 }
