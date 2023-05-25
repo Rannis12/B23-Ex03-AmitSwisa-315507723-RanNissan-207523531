@@ -104,9 +104,11 @@ namespace EX03.ConsoleUI
         {
             string licenseNumber;
 
-            Console.WriteLine("Please enter license number: ");
+            Console.WriteLine(VehicleFactory.GeneralQuestions[0].Value);
 
             getLicenseNumber(out licenseNumber);
+
+            Console.WriteLine(VehicleFactory.GeneralQuestions[1].Value);
 
             GarageForm.eServiceStatus serviceStatus = getVehicleStatusSelectionFromUser();
 
