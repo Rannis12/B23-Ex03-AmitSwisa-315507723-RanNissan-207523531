@@ -37,5 +37,7 @@ namespace EX03.GarageLogic.entities
         {
             return this.m_Wheels.Length;
         }
+        
+        
     }
 }
