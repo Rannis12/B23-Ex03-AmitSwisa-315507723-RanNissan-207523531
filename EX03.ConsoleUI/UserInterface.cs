@@ -102,7 +102,52 @@ namespace EX03.ConsoleUI
 
         private void changeVehicleStatusInGarage()
         {
-            
+            string licenseNumber;
+
+            Console.WriteLine("Please enter license number: ");
+
+            getLicenseNumber(out licenseNumber);
+
+            GarageForm.eServiceStatus serviceStatus = getVehicleStatusSelectionFromUser();
+
+
+
+        }
+
+        private GarageForm.eServiceStatus getVehicleStatusSelectionFromUser()
+        {
+            bool isValidSelection = false;
+            GarageForm.eServiceStatus serviceStatus = GarageForm.eServiceStatus.InRepair;
+
+            Console.WriteLine("Please select one of the following: ");
+            Console.WriteLine("1. InRepair. ");
+            Console.WriteLine("2. Repaired. ");
+            Console.WriteLine("3. Payed. ");
+
+            do
+            {
+                int userSelection = readIntegerInputFromUser();
+                
+
+                if (!(userSelection >= 1 && userSelection <= 3))
+                {
+                    Console.WriteLine("Please make sure you select option from the menu.");
+                }
+                else
+                {
+                    serviceStatus = getAsEServiceStatus(userSelection);
+                    isValidSelection = true;
+                }
+            }
+            while(!isValidSelection);
+
+            return serviceStatus;
+        }
+
+        private GarageForm.eServiceStatus getAsEServiceStatus(int i_Selection)
+        {
+            return (GarageForm.eServiceStatus)Enum.
+                ToObject(typeof(GarageForm.eServiceStatus), i_Selection);
         }
 
         private void showAllLicensesWithFilterOption()
@@ -152,8 +197,6 @@ namespace EX03.ConsoleUI
 
                 m_GarageManager.ChangeVehicleStatusInTheGarage(o_LicenseNumber, GarageForm.eServiceStatus.InRepair);
             }
-
-
         }
 
         private void collectVehicleData(string i_VehicleType)
