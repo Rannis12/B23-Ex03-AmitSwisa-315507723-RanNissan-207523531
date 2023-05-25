@@ -24,5 +24,22 @@ namespace EX03.GarageLogic.entities.Vehicles
             this.m_EnergySource = new FuelEnergy(r_MaxFuelTank, i_CurrentFuelAmount, FuelEnergy.eFuelType.Soler);
         }
 
+        public override List<string> GetSpecificInfo()
+        {
+            List<string> truckInfoList = new List<string>();
+            
+            if (m_IsLoadHazardousMaterials)
+            {
+                truckInfoList.Add("Is refrigerated truck: Yes");
+            }
+            else
+            {
+                truckInfoList.Add("Is refrigerated truck: No");
+            }
+
+            truckInfoList.Add("Truck load amount: " + m_LoadAmount);
+
+            return truckInfoList;
+        }
     }
 }

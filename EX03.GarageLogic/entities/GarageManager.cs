@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EX03.GarageLogic.entities;
 using EX03.GarageLogic.entities.EnergySourceTypes;
 using EX03.GarageLogic.entities.Factory;
+using EX03.GarageLogic.Exceptions;
 
 namespace EX03.GarageLogic
 {
@@ -29,7 +30,15 @@ namespace EX03.GarageLogic
         {
             //if its the same status - throw exception.
             //else
-            r_GarageForms[i_LicenseNumber].ServiceStatus = i_eServiceStatus;
+            if(r_GarageForms.ContainsKey(i_LicenseNumber))
+            {
+                r_GarageForms[i_LicenseNumber].ServiceStatus = i_eServiceStatus;
+            }
+            else
+            {
+                throw new KeyNotFoundException($"The license number {i_LicenseNumber} doesn't exists in the garage.");
+            }
+            
         }
 
         public void RefuelRegularVehicle(string i_LicenseNumber, FuelEnergy.eFuelType i_eFuelType, float i_AmountToFill)
@@ -47,15 +56,21 @@ namespace EX03.GarageLogic
 
         public void RefuelElectricVehicle(string i_LicenseNumber, float i_AmountToFill)
         {
-            //r_GarageForms[i_LicenseNumber].Vehicle.
+            if(r_GarageForms.ContainsKey(i_LicenseNumber))
+            {
+                r_GarageForms[i_LicenseNumber].Vehicle.EnergySource.FillEnergy(i_AmountToFill);
+            }
+            else
+            {
+                throw new KeyNotFoundException($"The license number {i_LicenseNumber} doesn't exists in the garage.");
+            }
         }
+        
+        // public VehicleDetails GetVehicleDetails(string i_LicenseNumber)
+        // {
+        //
+        // } 
 
-
-        /*
-        public VehicleDetails GetVehicleDetails(string i_LicenseNumber)
-        {
-
-        } */
         
         public string[] ShowAllLicensesWithFilterOption(int i_ServiceStatus) //returns only arrays after filtering.
         {
@@ -97,6 +112,11 @@ namespace EX03.GarageLogic
             {
                 throw new KeyNotFoundException($"The license number {i_LicenseNumber} doesn't exists in the garage.");
             }
+        }
+
+        public GarageForm GetGarageForm(string i_LicenseNumber)
+        {
+            return r_GarageForms[i_LicenseNumber];
         }
     }
     

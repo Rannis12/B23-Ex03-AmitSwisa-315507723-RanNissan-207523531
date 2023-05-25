@@ -36,5 +36,14 @@ namespace EX03.GarageLogic.entities.VehicleModels
             this.r_NumOfDoors = i_NumOfDoors;
         }
 
+        public override List<string> GetSpecificInfo()
+        {
+            List<string> carInfoList = new List<string>();
+
+            carInfoList.Add("Color: " + Enum.GetName(typeof(eColor), r_Color));
+            carInfoList.Add("Number of doors: " + r_NumOfDoors.ToString());
+
+            return carInfoList;
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace EX03.GarageLogic.entities
 {
     public abstract class Vehicle
     {
-        private string m_Model { get; }
+        private string m_Model;
         private readonly string r_LicenseNumber;
         private Wheel[] m_Wheels;
         protected EnergySource m_EnergySource;
@@ -53,5 +53,15 @@ namespace EX03.GarageLogic.entities
                 return m_EnergySource;
             }
         }
+
+        public string Model
+        {
+            get
+            {
+                return m_Model;
+            }
+        }
+
+        public abstract List<string> GetSpecificInfo();
     }
 }

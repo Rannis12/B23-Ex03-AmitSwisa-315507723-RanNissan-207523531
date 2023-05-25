@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Runtime.Remoting.Services;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using EX03.GarageLogic.entities;
 using EX03.GarageLogic.entities.EnergySourceTypes;
 using EX03.GarageLogic.entities.Factory;
 using EX03.GarageLogic.entities.VehicleModels;
+using EX03.GarageLogic.Exceptions;
 
 namespace EX03.ConsoleUI
 {
@@ -90,15 +92,106 @@ namespace EX03.ConsoleUI
                     refuelRegularVehicle();
                     break;
                 case eMenuOptions.RefuelElectricVehicle:
-                    
+                    refuelElectricVehicle();
                     break;
                 case eMenuOptions.ShowVehicleDetails:
-                    
+                    showVehicleDetails();
                     break;
                 case eMenuOptions.Exit:
                     Console.WriteLine("GoodBye!");
                     Environment.Exit(0);
                     break;
+            }
+        }
+
+        private void showVehicleDetails()
+        {
+            Console.WriteLine("Please enter car's license number: ");
+            string licenseNumber = getLicenseNumberFromClient();
+
+            displayFormInfo(licenseNumber);
+            displaySpecificInfo(licenseNumber);
+
+        }
+
+        private void displaySpecificInfo(string i_LicenseNumber)
+        {
+            try
+            {
+                GarageForm garageForm = m_GarageManager.GetGarageForm(i_LicenseNumber);
+                List<string> relevantDetails = garageForm.Vehicle.GetSpecificInfo();
+
+                foreach(string relevantDetail in relevantDetails)
+                {
+                    Console.WriteLine(relevantDetail);
+                }
+            }
+            catch(KeyNotFoundException knf)
+            {
+                Console.WriteLine(knf.Message);
+            }
+        }
+
+        private void displayFormInfo(string i_LicenseNumber)
+        {
+            try
+            {
+                GarageForm garageForm = m_GarageManager.GetGarageForm(i_LicenseNumber);
+
+                Console.WriteLine($"License number: {i_LicenseNumber}");
+                Console.WriteLine($"Manufacturer name: {garageForm.Vehicle.Model}");
+                Console.WriteLine($"Owner name: {garageForm.Client.ClientName}");
+                Console.WriteLine($"Current status service: {garageForm.ServiceStatus}");
+
+                foreach(Wheel wheel in garageForm.Vehicle.Wheels)
+                {
+                    Console.WriteLine($"Manufacturer name: {wheel.Manufacturer}");
+                    Console.WriteLine($"Current pressure: {wheel.CurrentTierPressure}");
+                }
+
+                if(garageForm.Vehicle.EnergySource is FuelEnergy)
+                {
+                    FuelEnergy fuelEnergy = garageForm.Vehicle.EnergySource as FuelEnergy;
+                    Console.WriteLine($"Current amount of fuel: {fuelEnergy.CurrentEnergyAmount}");
+                    Console.WriteLine($"Fuel type: {fuelEnergy.FuelType}");
+                }
+                else
+                {
+                    ElectricEnergy electricEnergy = garageForm.Vehicle.EnergySource as ElectricEnergy;
+                    Console.WriteLine($"Battery percentage: {electricEnergy.CurrentEnergyAmount}");
+                }
+            }
+            catch (KeyNotFoundException knf)
+            {
+                Console.WriteLine(knf.Message);
+            }
+        }
+
+        private void refuelElectricVehicle()
+        {
+            Console.WriteLine("Please enter your car's license number: ");
+
+            string licenseNumber = getLicenseNumberFromClient();
+
+            Console.WriteLine("Please enter the amount of time you would like to charge the battery: ");
+
+            float chargeTime = readFloatInputFromUser();
+
+            try
+            {
+                m_GarageManager.RefuelElectricVehicle(licenseNumber, chargeTime);
+            }
+            catch(KeyNotFoundException knf)
+            {
+                Console.WriteLine(knf.Message);
+            }
+            catch(ArgumentException ae)
+            {
+                Console.WriteLine(ae.Message);
+            }
+            catch(ValueOutOfRangeException voor)
+            {
+                Console.WriteLine(voor.Message);
             }
         }
 
@@ -147,13 +240,12 @@ namespace EX03.ConsoleUI
             }
             catch(ArgumentException ae)
             {
-
+                Console.WriteLine(ae.Message);
             }
-            
-            
-
-
-
+            catch(ValueOutOfRangeException voor)
+            {
+                Console.WriteLine(voor.Message);
+            }
         }
 
         private void inflateVehicleWheelsToMaximum()
@@ -179,8 +271,14 @@ namespace EX03.ConsoleUI
 
             GarageForm.eServiceStatus serviceStatus = getVehicleStatusSelectionFromUser();
 
-            // TODO - FINISH
-
+            try
+            {
+                m_GarageManager.ChangeVehicleStatusInTheGarage(licenseNumber, serviceStatus);
+            }
+            catch(KeyNotFoundException knf)
+            {
+                Console.WriteLine(knf.Message);
+            }
         }
 
         private GarageForm.eServiceStatus getVehicleStatusSelectionFromUser()

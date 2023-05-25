@@ -43,5 +43,21 @@ namespace EX03.GarageLogic.entities
         {
             inflateTire(r_MaximumTirePressure - m_CurrentTirePressure);
         }
+
+        public string Manufacturer
+        {
+            get
+            {
+                return m_Manufacturer;
+            }
+        }
+
+        public float CurrentTierPressure
+        {
+            get
+            {
+                return m_CurrentTirePressure;
+            }
+        }
     }
 }

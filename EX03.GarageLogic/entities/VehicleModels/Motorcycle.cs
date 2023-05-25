@@ -37,5 +37,15 @@ namespace EX03.GarageLogic.entities.VehicleModels
             this.m_LicenseType = i_LicenseType;
             this.m_EngineCapacity = i_EngineCapacity;
         }
+
+        public override List<string> GetSpecificInfo()
+        {
+            List<string> motorCycleInfoList = new List<string>();
+
+            motorCycleInfoList.Add("License type: " + Enum.GetName(typeof(Motorcycle.eLicenseType), m_LicenseType));
+            motorCycleInfoList.Add("Engine capacity: " + m_EngineCapacity);
+
+            return motorCycleInfoList;
+        }
     }
 }
