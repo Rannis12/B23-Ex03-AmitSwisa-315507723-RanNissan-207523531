@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EX03.GarageLogic;
 using EX03.GarageLogic.entities;
 using EX03.GarageLogic.entities.Factory;
+using EX03.GarageLogic.entities.VehicleModels;
 
 namespace EX03.ConsoleUI
 {
@@ -182,13 +183,18 @@ namespace EX03.ConsoleUI
             
             if(!m_GarageManager.IsVehicleExistsInTheGarage(licenseNumber))
             {
-                string clientName = getClientName();
-                
-                string phoneNumber = getClientPhoneNumber();
-
-                string vehicleType = getVehicleInput();
-
-                collectVehicleData(vehicleType);
+                try
+                {
+                    FillClientForm();
+                }
+                catch (ArgumentException ae)
+                {
+                    Console.WriteLine(ae.Message);
+                }
+                catch (FormatException fe)
+                {
+                    Console.WriteLine(fe.Message);
+                }
             }
             else
             {
@@ -199,11 +205,16 @@ namespace EX03.ConsoleUI
         }
 
         // TODO - i_VehicleType should be int.
-        private void collectVehicleData(string i_VehicleType)
+        private void FillClientForm()
         {
-            VehicleFactory.eVehicleTypes vehicleType = (VehicleFactory.eVehicleTypes)Enum.ToObject(
-                typeof(VehicleFactory.eVehicleTypes),
-                i_VehicleType);
+            Console.WriteLine("Whats your name?");
+            string clientName = getClientResponse();
+                
+            Console.WriteLine("What is your phone number?");
+            string phoneNumber = getClientResponse();
+
+            Console.WriteLine("Choose your vehicle type " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!): ");
+            string vehicleType = getClientResponse();
 
             List<KeyValuePair<Type, string>> clientForm 
                 = this.m_GarageManager.GetClientVehicleForm(vehicleType);
@@ -214,6 +225,7 @@ namespace EX03.ConsoleUI
              * TODO 3. Insert new vehicle using GameManager function (That will call VehicleFactory).
              * TODO -  Insert client (if not already exist).
              */
+
             
             
             /*float energyToDrive= 0;
@@ -306,37 +318,11 @@ namespace EX03.ConsoleUI
             return floatInput;
             ;
         }
-
-        private string getClientName()
-        {
-            Console.WriteLine("Please enter your name:");
-            string clientName = Console.ReadLine();
-            return clientName;
-        }
         
-        private string getClientPhoneNumber()
+        private string getClientResponse()
         {
-            string phoneNumber = "";
-            bool isValidNumber = false;
-
-            Console.WriteLine("Please enter your phone number: ");
-
-            do
-            {
-                phoneNumber = Console.ReadLine();
-
-                if(!isValidPhoneNumber(phoneNumber))
-                {
-                    Console.WriteLine("invalid phone number. Please try again: ");
-                }
-                else
-                {
-                    isValidNumber = true;
-                }
-            }
-            while(!isValidNumber);
-
-            return phoneNumber;
+            string res = Console.ReadLine();
+            return res;
         }
 
         private bool isValidPhoneNumber(string i_PhoneNumber)
@@ -354,56 +340,42 @@ namespace EX03.ConsoleUI
 
             return isValidNumber;
         }
-
-        // TODO - Should receive int value of vehicle type.
-        // TODO - Change VehicleFactory.GetVehiclesTypesAsArray to modify array from ElectricCar to 1. Electric car.
-        // TODO  - read index and verify existance.
-        private string getVehicleInput()
+        
+        private int getVehicleTypeFromClient()
         {
             bool validInputFromUser = false;
-            string vehicleType = null;
+            int vehicleType = -1;
 
             Console.WriteLine("Choose your vehicle type " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!): ");
             
             do
             {
-                vehicleType = Console.ReadLine();
+                string vehicleTypeAsString = Console.ReadLine();
 
-                if(!isOneOfVehicles(vehicleType))
+                try
                 {
-                    Console.WriteLine($@"There's no {vehicleType} exists. Please enter again: ");
+                    if(vehicleTypeAsString != null)
+                    {
+                        if(!this.m_GarageManager.IsVehicleTypeExist(vehicleTypeAsString))
+                        {
+                            throw new ArgumentOutOfRangeException("Vehicle type doesnt exist.");
+                        }
+                        else
+                        {
+                            validInputFromUser = true;
+                        }
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    validInputFromUser = true;
+                    Console.WriteLine($@"There's no {vehicleTypeAsString} exists. Please enter again: ");
                 }
             }
             while(!validInputFromUser);
 
             return vehicleType;
         }
-
-        private bool isOneOfVehicles(string i_VehicleType)
-        {
-            bool isValidVehicle = false;
-            string[] arrayOfVehicles = VehicleFactory.GetVehiclesTypesAsArray();
-
-            foreach(string vehicleType in arrayOfVehicles)
-            {
-                if(vehicleType.ToUpper().Equals(i_VehicleType.ToUpper()))
-                {
-                    isValidVehicle = true;
-                    break;
-                }
-            }
-            //return i_VehicleType.ToUpper().Equals("ELECTRICCAR") 
-            //    || i_VehicleType.ToUpper().Equals("FUELCAR")                                            
-            //    || i_VehicleType.ToUpper().Equals("TRUCK")         
-            //    || i_VehicleType.ToUpper().Equals("ELECTRICMOTORCYCLE")                                         
-            //    || i_VehicleType.ToUpper().Equals("FUELCAR");
-            return isValidVehicle;
-        }
-
+        
         private string getLicenseNumberFromClient()
         {
             string licenseNumberResponse = "";

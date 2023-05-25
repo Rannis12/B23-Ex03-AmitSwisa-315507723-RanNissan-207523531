@@ -48,6 +48,7 @@ namespace EX03.GarageLogic
         {
 
         } */
+        
         public string[] ShowAllLicensesWithFilterOption(int i_ServiceStatus) //returns only arrays after filtering.
         {
            List<string> licenseArray = new List<string>();
@@ -64,12 +65,19 @@ namespace EX03.GarageLogic
 
            return licenseArray.ToArray();
         }
+        
         public string[] GetSupportedVehiclesTypes()
         {
-            return Enum.GetNames(typeof(VehicleFactory.eVehicleTypes));
+            return VehicleFactory.GetVehiclesTypesAsArray();
         }
 
-        public List<KeyValuePair<Type, string>> GetClientVehicleForm(VehicleFactory.eVehicleTypes i_eVehicleType)
+        public bool IsVehicleTypeExist(string i_VehicleType)
+        {
+            VehicleFactory.eVehicleTypes enumValue;
+            return Enum.TryParse(i_VehicleType, out enumValue);
+        }
+
+        public List<KeyValuePair<Type, string>> GetClientVehicleForm(string i_eVehicleType)
         {
             return VehicleFactory.GetSpecificVehicleQuestions(i_eVehicleType);
         }

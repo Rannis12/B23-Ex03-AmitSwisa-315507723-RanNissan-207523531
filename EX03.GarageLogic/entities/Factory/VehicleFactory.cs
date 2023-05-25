@@ -48,11 +48,16 @@ namespace EX03.GarageLogic.entities.Factory
             return Enum.GetNames(typeof(eVehicleTypes));
         }
 
-        public static List<KeyValuePair<Type, string>> GetSpecificVehicleQuestions(eVehicleTypes i_VehicleType)
+        public static List<KeyValuePair<Type, string>> GetSpecificVehicleQuestions(string i_VehicleType)
         {
             List<KeyValuePair<Type, string>> questionsList = new List<KeyValuePair<Type, string>>();
+            
+            questionsList.Add(new KeyValuePair<Type, string>(typeof(float), 
+                "How much air pressure does your tiers have? "));
 
-            switch(i_VehicleType)
+            eVehicleTypes enumValue = (eVehicleTypes)Enum.ToObject(typeof(eVehicleTypes), i_VehicleType);
+
+            switch(enumValue)
             {
                 case eVehicleTypes.ElectricCar:
                     addGenericCarQuestions(ref questionsList);
@@ -107,6 +112,19 @@ namespace EX03.GarageLogic.entities.Factory
                 "How many doors do the car have? " + numOfDoorsOptions.ToString()));
         }
 
+        public static bool isVehicleTypeExist(string i_VehicleType)
+        {
+            eVehicleTypes enumValue;
+            try
+            {
+                return Enum.TryParse(i_VehicleType, out enumValue);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        
         public static Vehicle CreateVehicle(eVehicleTypes i_VehicleType, List<Object> i_Params)
         {
             // TODO - Switch(i_VehicleType).
