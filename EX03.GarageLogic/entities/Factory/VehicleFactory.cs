@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static EX03.GarageLogic.entities.VehicleModels.Car;
 
 namespace EX03.GarageLogic.entities.Factory
 {
@@ -22,5 +23,14 @@ namespace EX03.GarageLogic.entities.Factory
         {
             return Enum.GetNames(typeof(eVehicleTypes));
         }
+
+        //public static Vehicle BuildElectricCar(string i_LicenseNumber, eColor i_Color, 
+        //        eNumOfDoors i_NumOfDoors)
+        //{/*
+        //    public ElectricCar(string i_LicenseNumber, eColor i_Color, eNumOfDoors i_NumOfDoors,
+        //         float i_CurrentBatteryTimeLeft) : base(i_LicenseNumber, i_Color, i_NumOfDoors)*/
+        //    return new Vehicle();
+        //}
+
     }
 }
