@@ -15,6 +15,11 @@ namespace EX03.GarageLogic.entities.EnergySourceTypes
 
         public EnergySource(float i_MaxEnergyAmount, float i_CurrentFuelAmount)
         {
+            if(i_CurrentFuelAmount > i_MaxEnergyAmount)
+            {
+                throw new ArgumentException("Current energy amount cant be bigger them maximum energy amount.");
+            }
+            
             this.m_MaxEnergyAmount = i_MaxEnergyAmount;
             this.m_CurrentEnergyAmount = i_CurrentFuelAmount;
         }

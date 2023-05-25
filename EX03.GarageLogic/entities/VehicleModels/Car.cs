@@ -10,7 +10,7 @@ namespace EX03.GarageLogic.entities.VehicleModels
     {
         public enum eColor
         {
-            Red,
+            Red = 1,
             White,
             Black,
             Yellow
@@ -18,10 +18,10 @@ namespace EX03.GarageLogic.entities.VehicleModels
 
         public enum eNumOfDoors
         {
-            Two = 2,
-            Three = 3,
-            Four = 4,
-            Five = 5
+            Two = 1,
+            Three,
+            Four,
+            Five
         }
 
         private const int k_NumOfWheels = 5;

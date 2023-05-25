@@ -14,7 +14,7 @@ namespace EX03.ConsoleUI
 {
     class UserInterface
     {
-        private GarageManager m_GarageManager;
+        private readonly GarageManager m_GarageManager;
 
         private enum eMenuOptions
         {
@@ -28,8 +28,14 @@ namespace EX03.ConsoleUI
             Exit
         }
 
+        public UserInterface()
+        {
+            m_GarageManager = new GarageManager();
+        }
+
         private void printMenu()
         {
+            Console.Clear();
             Console.WriteLine("Welcome to our Garage! Please select one of the following options:");
             Console.WriteLine("1. Insert A new vehicle to the garage: ");
             Console.WriteLine("2. Show list of all vehicle's license number in the garage: ");
@@ -40,13 +46,15 @@ namespace EX03.ConsoleUI
             Console.WriteLine("7. Show vehicle's information: ");
             Console.WriteLine("8. Exit. ");
         }
-        private void getUserSelectionFromMenu()
+        public void StartInteraction()
         {
-            bool isValidSelectionFromMenu = false;
-            int userSelection;
-
+            bool isExiting = false;
+            
             do
             {
+                printMenu();
+                int userSelection = -1;
+                
                 string userInput = Console.ReadLine();
 
                 if (int.TryParse(userInput, out userSelection))
@@ -57,7 +65,15 @@ namespace EX03.ConsoleUI
                     }
                     else
                     {
-                        isValidSelectionFromMenu = true;
+                        if(userSelection == 8)
+                        {
+                            isExiting = true;
+                        }
+                        else
+                        {
+                            eMenuOptions selectedOption = (eMenuOptions)Enum.ToObject(typeof(eMenuOptions), userSelection);
+                            handleUserSelection(selectedOption);
+                        }
                     }
                 }
                 else
@@ -65,9 +81,9 @@ namespace EX03.ConsoleUI
                     Console.WriteLine("You entered an invalid input. please make sure you insert only number: ");
                 }
             }
-            while (!isValidSelectionFromMenu);
+            while (!isExiting);
 
-            this.handleUserSelection((eMenuOptions)Enum.ToObject(typeof(eMenuOptions), userSelection));
+            
         }
 
         private void handleUserSelection(eMenuOptions i_UserSelection)
@@ -149,11 +165,6 @@ namespace EX03.ConsoleUI
             {
 
             }
-            
-            
-
-
-
         }
 
         private void inflateVehicleWheelsToMaximum()
@@ -250,7 +261,7 @@ namespace EX03.ConsoleUI
             {
                 try
                 {
-                    FillClientForm();
+                    FillClientForm(licenseNumber);
                 }
                 catch (ArgumentException ae)
                 {
@@ -259,6 +270,11 @@ namespace EX03.ConsoleUI
                 catch (FormatException fe)
                 {
                     Console.WriteLine(fe.Message);
+                }
+                finally
+                {
+                    Console.WriteLine("Press any key in order to return to menu.");
+                    Console.ReadKey();
                 }
             }
             else
@@ -277,14 +293,13 @@ namespace EX03.ConsoleUI
         }
 
         // TODO - i_VehicleType should be int.
-        private void FillClientForm()
+        private void FillClientForm(string i_LicenseNumber)
         {
             string clientName = getClientName();
                 
             Console.WriteLine("What is your phone number?");
             string phoneNumber = getPhoneNumber();
 
-            Console.WriteLine("Choose your vehicle type " + this.m_GarageManager.GetSupportedVehiclesTypes() + " (without spaces!): ");
             int vehicleType = getVehicleTypeFromClient();
             
             Console.WriteLine("Model name:");
@@ -292,12 +307,8 @@ namespace EX03.ConsoleUI
             
             Console.WriteLine("Remaining energy in you vehicle?");
             float remainingEnergyInEnergySource = readFloatInputFromUser();
-            
-            Console.WriteLine("Wheels manifacturer name?");
-            string wheelsManufacturerName = getClientResponse();
 
-            Console.WriteLine("Wheels air pressure?");
-            float wheelsCurrentAirPressure = readFloatInputFromUser();
+            Wheel wheelModel = getWheelInformationFromClient();
             
             List<string> vehicleQuestions 
                 = this.m_GarageManager.GetClientVehicleForm(vehicleType);
@@ -313,8 +324,28 @@ namespace EX03.ConsoleUI
             }
             
             // TODO - make car.
+            Vehicle vehicle = VehicleFactory.CreateVehicle(i_LicenseNumber, vehicleType, 
+                modelName, remainingEnergyInEnergySource, wheelModel, clientAnswers);
 
+            GarageClient client = new GarageClient(clientName, phoneNumber);
+            
+            this.m_GarageManager.InsertVehicleToGarage(i_LicenseNumber, vehicle, client);
+            Console.Clear();
+            Console.WriteLine("Vehicle added to garage!\n");
+        }
+        
+        private Wheel getWheelInformationFromClient()
+        {
+            Console.WriteLine("Wheels manifacturer name?");
+            string wheelsManufacturerName = getClientResponse();
 
+            Console.WriteLine("Wheels air pressure?");
+            float wheelsCurrentAirPressure = readFloatInputFromUser();
+            
+            Console.WriteLine("Maximum wheels air pressure?");
+            float maxWheelsAirPressure = readFloatInputFromUser();
+
+            return new Wheel(wheelsManufacturerName, wheelsCurrentAirPressure, maxWheelsAirPressure);
         }
 
         private string getPhoneNumber()
